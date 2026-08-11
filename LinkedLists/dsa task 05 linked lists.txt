@@ -1,0 +1,11 @@
+
+Make a Single Program of contact management system  with following functionalities. write in custom way, use start , current and next pointers . use using namespace std one time on top . ask user to input even values of nodes. get all the data from the user . use c++ laguage . 
+
+
+1. Create a Linked List: Implement a Single linked list with a user-defined even number of nodes.
+
+2. Traverse the Linked List: Provide functionality to traverse the linked list and display its contents.
+
+3. Search the Linked List: Implement  search functions that simulates how a user might search by name, phoneNo and email 
+
+4. Update the Linked List: Each node should store details such as Name,  phoneNo and email   Implement functionality to update these details, allowing the user to choose whether to update all details or specific details while keeping the rest of details intact.

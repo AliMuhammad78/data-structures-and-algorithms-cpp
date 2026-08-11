@@ -1,0 +1,193 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    string name;
+    int rollNumber;
+    float cgpa;
+    Node* next;
+};
+
+// Function to create a new node
+Node* createNode(string name, int rollNumber, float cgpa) {
+    Node* newNode = new Node();
+    newNode->name = name;
+    newNode->rollNumber = rollNumber;
+    newNode->cgpa = cgpa;
+    newNode->next = nullptr;
+    return newNode;
+}
+
+// Function to create a linked list with an even number of nodes
+Node* createLinkedList(int n) {
+    if (n % 2 != 0) {
+        cout << "Please enter an even number of nodes." << endl;
+        return nullptr;
+    }
+    
+    Node* head = nullptr;
+    Node* tail = nullptr;
+    
+    for (int i = 0; i < n; i++) {
+        string name;
+        int rollNumber;
+        float cgpa;
+        cout << "Enter name for student " << i + 1 << ": ";
+        cin >> name;
+        cout << "Enter roll number for student " << i + 1 << ": ";
+        cin >> rollNumber;
+        cout << "Enter CGPA for student " << i + 1 << ": ";
+        cin >> cgpa;
+        
+        Node* newNode = createNode(name, rollNumber, cgpa);
+        
+        if (head == nullptr) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+    
+    return head;
+}
+
+// Function to traverse the linked list
+void traverseLinkedList(Node* head) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        cout << "Name: " << temp->name << ", Roll Number: " << temp->rollNumber << ", CGPA: " << temp->cgpa << endl;
+        temp = temp->next;
+    }
+}
+
+// Function to search in the linked list
+void searchLinkedList(Node* head, int choice) {
+    string searchName;
+    int searchRoll;
+    float searchCgpa;
+    
+    switch (choice) {
+        case 1: // Search by name
+            cout << "Enter name to search: ";
+            cin >> searchName;
+            break;
+        case 2: // Search by roll number
+            cout << "Enter roll number to search: ";
+            cin >> searchRoll;
+            break;
+        case 3: // Search by CGPA
+            cout << "Enter CGPA to search: ";
+            cin >> searchCgpa;
+            break;
+        default:
+            cout << "Invalid choice." << endl;
+            return;
+    }
+    
+    Node* temp = head;
+    bool found = false;
+    while (temp != nullptr) {
+        if ((choice == 1 && temp->name == searchName) || 
+            (choice == 2 && temp->rollNumber == searchRoll) || 
+            (choice == 3 && temp->cgpa == searchCgpa)) {
+            cout << "Record found: Name: " << temp->name << ", Roll Number: " << temp->rollNumber << ", CGPA: " << temp->cgpa << endl;
+            found = true;
+            break;
+        }
+        temp = temp->next;
+    }
+    
+    if (!found) {
+        cout << "Record not found!" << endl;
+    }
+}
+
+// Function to update a node in the linked list
+void updateLinkedList(Node* head) {
+    int rollNumberToUpdate;
+    cout << "Enter roll number of the student to update: ";
+    cin >> rollNumberToUpdate;
+    
+    Node* temp = head;
+    bool found = false;
+    
+    while (temp != nullptr) {
+        if (temp->rollNumber == rollNumberToUpdate) {
+            found = true;
+            cout << "Record found: Name: " << temp->name << ", Roll Number: " << temp->rollNumber << ", CGPA: " << temp->cgpa << endl;
+            
+            int updateChoice;
+            cout << "Do you want to update: 1. Name, 2. Roll Number, 3. CGPA, 4. All: ";
+            cin >> updateChoice;
+            
+            if (updateChoice == 1 || updateChoice == 4) {
+                cout << "Enter new name: ";
+                cin >> temp->name;
+            }
+            if (updateChoice == 2 || updateChoice == 4) {
+                cout << "Enter new roll number: ";
+                cin >> temp->rollNumber;
+            }
+            if (updateChoice == 3 || updateChoice == 4) {
+                cout << "Enter new CGPA: ";
+                cin >> temp->cgpa;
+            }
+            cout << "Record updated successfully!" << endl;
+            break;
+        }
+        temp = temp->next;
+    }
+    
+    if (!found) {
+        cout << "Record not found!" << endl;
+    }
+}
+
+// Main function
+int main() {
+    int n;
+    cout << "Enter an even number of students: ";
+    cin >> n;
+    
+    Node* head = createLinkedList(n);
+    if (head == nullptr) {
+        return 0;
+    }
+    
+    int choice;
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Traverse Linked List\n";
+        cout << "2. Search Linked List\n";
+        cout << "3. Update Linked List\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                traverseLinkedList(head);
+                break;
+            case 2:
+                int searchChoice;
+                cout << "Search by: 1. Name, 2. Roll Number, 3. CGPA: ";
+                cin >> searchChoice;
+                searchLinkedList(head, searchChoice);
+                break;
+            case 3:
+                updateLinkedList(head);
+                break;
+            case 4:
+                cout << "Exiting..." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Try again." << endl;
+        }
+    } while (choice != 4);
+    
+    return 0;
+}
+

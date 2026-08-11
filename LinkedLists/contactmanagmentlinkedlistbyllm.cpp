@@ -1,0 +1,222 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Contact {
+    string name;
+    string phoneNo;
+    string email;
+    Contact* next;  // Pointer to the next node
+};
+
+// Function to create a new contact node
+Contact* createContact(string name, string phoneNo, string email) {
+    Contact* newContact = new Contact;
+    newContact->name = name;
+    newContact->phoneNo = phoneNo;
+    newContact->email = email;
+    newContact->next = NULL;
+    return newContact;
+}
+
+// Function to create a linked list with an even number of nodes
+Contact* createContactList(int n) {
+    if (n % 2 != 0) {
+        cout << "Please enter an even number of contacts." << endl;
+        return NULL;
+    }
+
+    Contact* start = NULL;
+    Contact* current = NULL;
+
+    for (int i = 0; i < n; i++) {
+        string name, phoneNo, email;
+        cout << "Enter name for contact " << i + 1 << ": ";
+        cin >> name;
+        cout << "Enter phone number for contact " << i + 1 << ": ";
+        cin >> phoneNo;
+        cout << "Enter email for contact " << i + 1 << ": ";
+        cin >> email;
+
+        Contact* newContact = createContact(name, phoneNo, email);
+
+        if (start == NULL) {
+            start = newContact;
+            current = newContact;
+        } else {
+            current->next = newContact;
+            current = newContact;
+        }
+    }
+    return start;
+}
+
+// Function to traverse and display the contact list
+void traverseContacts(Contact* start) {
+    if (start == NULL) {
+        cout << "The contact list is empty." << endl;
+        return;
+    }
+
+    Contact* current = start;
+    while (current != NULL) {
+        cout << "Name: " << current->name << ", Phone No: " << current->phoneNo << ", Email: " << current->email << endl;
+        current = current->next;
+    }
+}
+
+// Function to search in the contact list
+void searchContacts(Contact* start, int searchChoice) {
+    string searchTerm;
+    bool found = false;
+
+    switch (searchChoice) {
+        case 1: // Search by Name
+            cout << "Enter name to search: ";
+            cin >> searchTerm;
+            break;
+        case 2: // Search by Phone Number
+            cout << "Enter phone number to search: ";
+            cin >> searchTerm;
+            break;
+        case 3: // Search by Email
+            cout << "Enter email to search: ";
+            cin >> searchTerm;
+            break;
+        default:
+            cout << "Invalid search option." << endl;
+            return;
+    }
+
+    Contact* current = start;
+    while (current != NULL) {
+        if ((searchChoice == 1 && current->name == searchTerm) ||
+            (searchChoice == 2 && current->phoneNo == searchTerm) ||
+            (searchChoice == 3 && current->email == searchTerm)) {
+            cout << "Contact found: Name: " << current->name << ", Phone No: " << current->phoneNo << ", Email: " << current->email << endl;
+            found = true;
+            break;
+        }
+        current = current->next;
+    }
+
+    if (!found) {
+        cout << "No contact found with the given information." << endl;
+    }
+}
+
+// Function to update the contact list
+void updateContact(Contact* start) {
+    string searchPhoneNo;
+    cout << "Enter phone number of the contact to update: ";
+    cin >> searchPhoneNo;
+
+    Contact* current = start;
+    bool found = false;
+
+    while (current != NULL) {
+        if (current->phoneNo == searchPhoneNo) {
+            found = true;
+            cout << "Contact found: Name: " << current->name << ", Phone No: " << current->phoneNo << ", Email: " << current->email << endl;
+
+            int updateChoice;
+            cout << "Do you want to update: 1. Name, 2. Phone No, 3. Email, 4. All: ";
+            cin >> updateChoice;
+
+            if (updateChoice == 1 || updateChoice == 4) {
+                cout << "Enter new name: ";
+                cin >> current->name;
+            }
+            if (updateChoice == 2 || updateChoice == 4) {
+                cout << "Enter new phone number: ";
+                cin >> current->phoneNo;
+            }
+            if (updateChoice == 3 || updateChoice == 4) {
+                cout << "Enter new email: ";
+                cin >> current->email;
+            }
+            cout << "Contact updated successfully!" << endl;
+            break;
+        }
+        current = current->next;
+    }
+
+    if (!found) {
+        cout << "No contact found with the given phone number." << endl;
+    }
+}
+
+// Function to add a new contact to the list
+void addContact(Contact*& start) {
+    string name, phoneNo, email;
+    cout << "Enter name for the new contact: ";
+    cin >> name;
+    cout << "Enter phone number for the new contact: ";
+    cin >> phoneNo;
+    cout << "Enter email for the new contact: ";
+    cin >> email;
+
+    Contact* newContact = createContact(name, phoneNo, email);
+
+    if (start == NULL) {
+        start = newContact;
+    } else {
+        Contact* current = start;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newContact;
+    }
+
+    cout << "New contact added successfully!" << endl;
+}
+
+// Main Function
+int main() {
+    int n;
+    cout << "Enter an even number of contacts to add: ";
+    cin >> n;
+
+    Contact* start = createContactList(n);
+    if (start == NULL) {
+        return 0;
+    }
+
+    int choice;
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Traverse Contact List\n";
+        cout << "2. Search Contact List\n";
+        cout << "3. Update Contact List\n";
+        cout << "4. Add New Contact\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                traverseContacts(start);
+                break;
+            case 2:
+                int searchChoice;
+                cout << "Search by: 1. Name, 2. Phone No, 3. Email: ";
+                cin >> searchChoice;
+                searchContacts(start, searchChoice);
+                break;
+            case 3:
+                updateContact(start);
+                break;
+            case 4:
+                addContact(start);
+                break;
+            case 5:
+                cout << "Exiting..." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+
